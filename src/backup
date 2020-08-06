@@ -1,0 +1,155 @@
+import React, { useState, useEffect } from "react"
+import logo from "./logo.svg"
+import "./App.css"
+
+import { Bootstrap, Grid, Row, Col, Container, Button } from "react-bootstrap"
+
+class App extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      newTask: "",
+      list: []
+    }
+  }
+
+  addTask(todoValue) {
+    //console.log("fhdsf");
+    if (todoValue !== "") {
+      const newTask = {
+        id: Date.now(),
+        value: todoValue,
+        isDone: false
+      }
+      const list = [...this.state.list]
+      list.push(newTask)
+
+      this.setState({
+        list,
+        newTask: ""
+      })
+    }
+  }
+
+  deleteTask(id) {
+    const list = [...this.state.list]
+    const updatedlist = list.filter((item) => item.id !== id)
+    this.setState({
+      list: updatedlist
+    })
+  }
+
+  doneTask(id) {
+    const list = [...this.state.list]
+    const task = list.filter((item) => item.id == id)
+    task[0].isDone = true
+    const updatedList = list.filter((item) => item.id !== id)
+    updatedList.push(task[0])
+    this.setState({
+      list: updatedList
+    })
+  }
+
+  undoTask(id) {
+    const list = [...this.state.list]
+    const task = list.filter((item) => item.id == id)
+    task[0].isDone = false
+    const updatedList = list.filter((item) => item.id !== id)
+    updatedList.push(task[0])
+    this.setState({
+      list: updatedList
+    })
+  }
+
+  updateInput(input) {
+    this.setState({ newTask: input })
+    console.log(this.state)
+  }
+
+  render() {
+    return (
+      <div>
+        <div className="container bg-dark pb-5">
+          <div className="row">
+            <div className="col-md-6 offset-md-3 text-center text-white p-5">
+              <h2>TODO APP</h2>
+              <br />
+              <input
+                className="form-control form-control-lg"
+                type="text"
+                required
+                onChange={(e) => this.updateInput(e.target.value)}
+                placeholder="Write the task over here!!"
+              />
+              <br />
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => this.addTask(this.state.newTask)}
+              >
+                Add Task
+              </button>
+            </div>
+          </div>
+          <div className="row">
+            <div className="col-6 text-center">
+              <div className="card">
+                <h4 className="card-header bg-dark  text-white">TASK TODO</h4>
+                <ul className="list-group">
+                  {this.state.list.map((item, index) => {
+                    if (!item.isDone) {
+                      return (
+                        <li key={index} className="list-group-item">
+                          {item.value}
+                          <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={(e) => this.doneTask(item.id)}
+                          >
+                            Done Task
+                          </button>{" "}
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => this.deleteTask(item.id)}
+                          >
+                            Delete Task
+                          </button>
+                        </li>
+                      )
+                    }
+                  })}
+                </ul>
+              </div>
+            </div>
+            <div className="col-6 text-center">
+              <div className="card">
+                <h4 className="card-header bg-dark text-white">TASK DONE</h4>
+                <ul className="list-group">
+                  {this.state.list.map((item, index) => {
+                    if (item.isDone) {
+                      return (
+                        <li key={index} className="list-group-item">
+                          {item.value}
+                          <button
+                            type="button"
+                            className="btn btn-info"
+                            onClick={(e) => this.undoTask(item.id)}
+                          >
+                            Undo Task
+                          </button>
+                        </li>
+                      )
+                    }
+                  })}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+}
+
+export default App
