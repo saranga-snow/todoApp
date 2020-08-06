@@ -119,13 +119,13 @@ function App() {
           <div className="row">
             <div className="col-6 text-center">
               <div className="card">
-                <h4 className="card-header bg-dark  text-white">TASK TODO</h4>
+                <h4 className="card-header bg-dark  text-white">TASKS TODO</h4>
                 <ul className="list-group">
                   {taskList.map((item, index) => {
                     if (!item.isDone) {
                       return (
                         <li key={index} className="list-group-item">
-                          {item.value}
+                          <h5>{item.value}</h5>
                           <button
                             type="button"
                             className="btn btn-success"
@@ -149,20 +149,28 @@ function App() {
             </div>
             <div className="col-6 text-center">
               <div className="card">
-                <h4 className="card-header bg-dark text-white">TASK DONE</h4>
+                <h4 className="card-header bg-dark text-white">TASKS DONE</h4>
                 <ul className="list-group">
                   {taskList.map((item, index) => {
                     if (item.isDone) {
                       return (
                         <li key={index} className="list-group-item">
-                          {item.value}
+                          <h5>{item.value}</h5>
                           <button
                             type="button"
                             className="btn btn-info"
                             onClick={(e) => undoTask(item.id)}
                           >
                             Undo Task
+                          </button>{"  "}
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={() => deleteTask(item.id)}
+                          >
+                            Delete Task
                           </button>
+                          
                         </li>
                       )
                     }
